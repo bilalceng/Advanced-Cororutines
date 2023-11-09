@@ -4,6 +4,8 @@ package com.bilalberek.advancedcoroutines
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.TextView
 import com.bilalberek.advancedcoroutines.databinding.ActivityMainBinding
 import kotlinx.coroutines.*
@@ -26,6 +28,8 @@ class MainActivity : AppCompatActivity() {
         textWithoutCoroutine = binding.textWithoutCoroutine
 
 
+
+
         "1" exampleOf {
             var utilities  = Utilities()
 
@@ -33,6 +37,8 @@ class MainActivity : AppCompatActivity() {
                 dataText.text =  utilities.fetchDataFromNetwork()
             }
         }
+
+
 
         "2" exampleOf {
 
@@ -47,9 +53,13 @@ class MainActivity : AppCompatActivity() {
            }
         }
 
+
+
         "3" exampleOf {
             textWithoutCoroutine.text = "Without Coroutine"
         }
+
+
 
         "3" exampleOf {
             val utilities = Utilities()
@@ -62,14 +72,45 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
-    }
+
+
+
+        "4" exampleOf {
+            var utilities = Utilities()
+
+            var user = utilities.vintageManner(23){ user ->
+
+                Handler(Looper.getMainLooper()).post {
+                    textWithoutCoroutine.text = user.name
+                }
+            }
+
+            }
+
+
+        "5" exampleOf {
+            GlobalScope.launch {
+                var utilities = Utilities()
+                var defferedList = utilities.getUsersFromLocalDatabase()
+
+                var userFromInternet = utilities.getUserFromInternet(2)
+
+                    println( utilities.controllingUserExistence(userFromInternet.await(), defferedList.await()))
+
+                }
+            }
+
+
+        }
+
+}
 
 
     infix fun String.exampleOf(block: () -> Unit){
         println("$this : ")
         block.invoke()
     }
-}
+
 
 
 
